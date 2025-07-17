@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdbool.h>
+#define MAX_NEIGHBOURS 5
+#define MAX_NODES 5
+int graph[MAX_NODES][MAX_NEIGHBOURS];
+int degree[MAX_NODES];
+void add_graph(int u,int v){
+    graph[u][degree[u]++] = v;
+    graph[v][degree[v]++] = u;
+}
+void bfs(int start){
+   bool visited[MAX_NODES] = {false};
+   int front;
+   int rear;
+   int queue[MAX_NEIGHBOURS];
+   front =0;
+   rear  =0;
+   visited[start] = true;
+   queue[rear++] = start;
+   int distance[MAX_NODES];
+   
+   distance[start] = 0;
+   while(front<rear){
+       int node = queue[front++];
+       for(int i=0;i<degree[node];i=i+1){
+           int neighbour = graph[node][i];
+           if(!visited[neighbour]){
+               visited[neighbour] = true;
+               queue[rear++] = neighbour;
+               distance[neighbour] = distance[node]+1;
+           }
+       }
+   }
+   printf("Value of rear =%d\n",rear);
+   for(int i =0;i<rear;i=i+1){
+   printf("The queue[%d] = %d",i,queue[i]);    
+   }
+   
+   printf("Printing the value of distances\n");
+   for(int i=0;i<MAX_NODES;i=i+1){
+       printf("Node = %d Distance = %d",i,distance[i]);
+   }
+   
+   
+} 
+
+int main() {
+    add_graph(0,1);
+    add_graph(0,2);
+    //add_graph(1,0);
+   // add_graph(1,1);
+    add_graph(1,3);
+    add_graph(2,3);
+    add_graph(2,4);
+    add_graph(3,4);
+    
+    /*for(int i=0;i<4;i=i+1){
+        
+        for(int j=0;j<degree[i];j=j+1){
+            printf("Graph[%d][%d] = %d\n",i,j,graph[i][j]);
+            //j=j+1;
+        }
+    }*/
+    bfs(2);
+    //two_sum(10);
+    return 0;
+}
